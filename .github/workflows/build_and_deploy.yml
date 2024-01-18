@@ -3,7 +3,7 @@ on:
   workflow_dispatch:
   push:
     branches:
-      - 'evok_dev'
+      - 'main'
     # paths-ignore:
     #   - '.github/workflows/*' # не запускать воркфлоу при обновлении самих воркфлоу
 jobs:
