@@ -1,0 +1,29 @@
+name: Build react native app and deploy it
+on: 
+  workflow_dispatch:
+  push:
+    branches:
+      - 'evok_dev'
+    # paths-ignore:
+    #   - '.github/workflows/*' # не запускать воркфлоу при обновлении самих воркфлоу
+jobs:
+  Install_and_test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Get repository code
+        uses: actions/checkout@v4
+      - name: Setup NodeJS
+        uses: actions/setup-node@v4
+        with:
+          node-version: 18
+          cache: 'yarn' # Кэшировать зависимости
+      - name: Install node modules
+        run: yarn install --frozen-lockfile # Означает что будут установлены строго те зависимости, что указаны в yarn.lock
+  # Build_android:
+  #   needs: Install_and_test
+  #   uses: ./.github/workflows/android_build.yml
+  #   secrets: inherit # It is important, otherwise the secrets referred in those files won’t get populated
+  Build_ios:
+    needs: Install_and_test
+    uses: ./.github/workflows/ios_build.yml
+    secrets: inherit
