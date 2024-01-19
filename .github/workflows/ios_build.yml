@@ -8,13 +8,13 @@ on:
         description: Publish to Appcenter
     secrets:
       P12_BASE64:
-        required: false
+        required: true
       EVOK_MOBILE_PROVISION_BASE64:
         required: true
       CODE_SIGNING_IDENTITY:
         required: true
       CERTIFICATE_PASSWORD:
-        required: false
+        required: true
       IOS_TEAM_ID:
         required: true
 
@@ -54,10 +54,10 @@ jobs:
         with:
           project-path: ios/learncicdrn.xcodeproj
           workspace-path: ios/learncicdrn.xcworkspace # optional
-          # p12-base64: ${{ secrets.P12_BASE64 }}
+          p12-base64: ${{ secrets.P12_BASE64 }}
           mobileprovision-base64: ${{ secrets.EVOK_MOBILE_PROVISION_BASE64 }}
           code-signing-identity: ${{ secrets.CODE_SIGNING_IDENTITY }}
-          # certificate-password: ${{ secrets.CERTIFICATE_PASSWORD }}
+          certificate-password: ${{ secrets.CERTIFICATE_PASSWORD }}
           team-id: ${{ secrets.IOS_TEAM_ID }}
           output-path: "LearnCICDRN.ipa"
       - name: Upload build artifact
