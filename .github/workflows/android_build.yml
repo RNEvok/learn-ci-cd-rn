@@ -7,6 +7,17 @@ on:
         required: false
         type: boolean
         description: Publish to Appcenter
+    secrets:
+      APP_CENTER_TOKEN_ANDROID:
+        required: true
+      ANDROID_KEYSTORE:
+        required: true
+      ANDROID_KEY_ALIAS:
+        required: true
+      ANDROID_KEYSTORE_PASSWORD:
+        required: true
+      ANDROID_KEY_PASSWORD:
+        required: true
 env:
   ARTIFACT_NAME: LearnCICDRN.aab
 jobs:
@@ -20,6 +31,11 @@ jobs:
         with:
           node-version: 18
           cache: 'yarn'
+      - name: Set up JDK 17
+        uses: actions/setup-java@v3
+        with:
+          java-version: 17
+          distribution: 'oracle'
       - name: Install Node modules
         run: yarn install --frozen-lockfile
       - name: Cache Gradle Wrapper
@@ -39,7 +55,17 @@ jobs:
       - name: Сделать билд
         run: |
           cd android && ./gradlew bundleRelease --no-daemon
-      - name: Upload build Artifact
+      - run: pwd
+      - name: Sign build
+        uses: r0adkll/sign-android-release@v1
+        id: sign_app
+        with:
+          releaseDirectory: android/app/build/outputs/bundle/release
+          signingKeyBase64: ${{ secrets.ANDROID_KEYSTORE }}
+          alias: ${{ secrets.ANDROID_KEY_ALIAS }}
+          keyStorePassword: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
+          keyPassword: ${{ secrets.ANDROID_KEY_PASSWORD }}
+      - name: Upload signed build Artifact
         uses: actions/upload-artifact@v3
         with:
           name: "${{ env.ARTIFACT_NAME }}"

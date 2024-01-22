@@ -44,8 +44,12 @@ jobs:
   Build_ios:
     needs: Bump_Android_and_iOS_versions
     uses: ./.github/workflows/ios_build.yml
+    with:
+      publish: true
     secrets: inherit # It is important, otherwise the secrets referred in those files won’t get populated
   Build_android:
     needs: Bump_Android_and_iOS_versions
     uses: ./.github/workflows/android_build.yml
+    with:
+      publish: true
     secrets: inherit
