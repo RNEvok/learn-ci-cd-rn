@@ -110,7 +110,7 @@ jobs:
           debug: false
   upload_to_testflight:
     if: ${{ inputs.publish == true }}
-    runs-on: ubuntu-latest
+    runs-on: macos-latest
     needs: build_ios
     steps:
       - uses: actions/checkout@v4
